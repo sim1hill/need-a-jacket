@@ -4,12 +4,16 @@ $(document).ready(function() {
   navigator.geolocation.getCurrentPosition(function(pos) {
   geocoder = new google.maps.Geocoder();
       var latlng = new google.maps.LatLng(pos.coords.latitude,pos.coords.longitude);
+      var longitude = pos.coords.longitude
+      var latitude = pos.coords.latitude
+       // pastWeather(latitude,longitude);
     geocoder.geocode({'latLng': latlng}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         var result = results[0];
-        var city = result.address_components[4].long_name;
+        var city = result.address_components[3].long_name;
         var state = result.address_components[4].short_name;
-        weatherApiCall(city,state)
+        
+        currentWeather(city,state);
 
     } else{
       alert("Sorry, something went wrong!");
@@ -18,7 +22,7 @@ $(document).ready(function() {
    
   });
 
-  function weatherApiCall(city,state){
+  function currentWeather(city,state){
     var slugCity = city.split(" ").join("_")
     $.ajax({
     url: "http://api.wunderground.com/api/bcb72f058f182c52/geolookup/conditions/q/" + state + "/" + slugCity + ".json",
@@ -48,6 +52,58 @@ $(document).ready(function() {
       $('#jacket').prepend("Leave the jacket at home or things are gonna get toasty.<br><img src='hot.gif'></img>")
     }
   }
+
+   function getDate(){
+    // var today = new Date();
+    // var dd = today.getDate();
+    // var mm = today.getMonth()+1;
+    // var yyyy = today.getFullYear();
+
+    // if(dd<10) {
+    //     dd='0'+dd
+    // } 
+
+    // if(mm<10) {
+    //     mm='0'+mm
+    // } 
+
+    // return today = yyyy+'-'+mm+'-'+ dd;
+    Date.addDays
+
+    Date.prototype.addDays = function(days) {
+    var dat = new Date(this.valueOf())
+    dat.setDate(dat.getDate() + days);
+    debugger;
+    return dat;
+}
+
+function getDates(startDate, stopDate) {
+    var dateArray = new Array();
+    var currentDate = startDate;
+    while (currentDate <= stopDate) {
+        dateArray.push( new Date (currentDate) )
+        currentDate = currentDate.addDays(1);
+    }
+        return dateArray;
+}
+  }
+
+  getDate();
+
+  // function pastWeather(lat,longi){
+  //   var shortLat = lat.toString().slice(0,6);
+  //   var shortLongi = longi.toString().slice(0,6);
+  //   var date = getDate();
+  //   //var url = "https://api.worldweatheronline.com/free/v2/past-weather.ashx?key=69506d8a3f22ea2023cbf8752829d&q=" + lat + "," + longi + "&date=" + startDate + "&enddate=" + endDate "fx=no&format=json";
+  //   $.ajax({
+  //   // url: url,
+  //   dataType: "jsonp",
+  //   success: function(parsed_json) {
+  // }
+  // });
+  // }
+
+ 
 
 });
 
